@@ -1,0 +1,50 @@
+{% extends 'chat/base.html' %}
+{% load static %}
+
+{% block title %}AI Chat{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'chat/css/chat.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="chat-container">
+    <header class="chat-header">
+        <h1>AI Assistant</h1>
+    </header>
+
+    <main class="chat-main">
+        <div class="chat-messages" id="chatMessages">
+            <!-- Messages will be dynamically inserted here -->
+        </div>
+
+        <div class="chat-loading" id="chatLoading" style="display: none;">
+            <div class="loading-spinner"></div>
+            <p>AI is thinking...</p>
+        </div>
+
+        <div class="chat-error" id="chatError" style="display: none;">
+            <p>An error occurred. Please try again.</p>
+        </div>
+    </main>
+
+    <form class="chat-form" id="chatForm">
+        {% csrf_token %}
+        <div class="input-container">
+            <textarea 
+                id="userInput" 
+                placeholder="Type your message here..." 
+                rows="1"
+                required
+            ></textarea>
+            <button type="submit" id="sendButton">
+                <span class="send-icon">➤</span>
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'chat/js/chat.js' %}"></script>
+{% endblock %}
