@@ -14,6 +14,7 @@ from .models import ChatSession, ChatMessage
 from django.utils import timezone
 from rest_framework.response import Response
 from rest_framework import status
+
 # Create your views here.
 def chat(request):
     """Render the chat interface."""
@@ -45,7 +46,6 @@ def groq_chat(request):
     except Exception as e:
         return Response({'error': 'Internal server error', 'details': str(e)}, status=500)
 
-
     
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -73,9 +73,10 @@ def user_chat_sessions(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_chat_session(request):
-    chat = ChatSession.objects.create(user=request.user, title="New Chat")
+    title = request.data.get('title', 'New Chat')  # Accept title from request
+    chat = ChatSession.objects.create(user=request.user, title=title)
     return Response({
-        'id': str(chat.id),  # Convert to string for frontend compatibility
+        'id': str(chat.id),  # Convert UUID to string for frontend compatibility
         'title': chat.title,
         'createdAt': int(chat.created_at.timestamp() * 1000),
         'messages': []
